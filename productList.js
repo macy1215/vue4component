@@ -2,18 +2,22 @@ import { createApp } from 'https://unpkg.com/vue@3/dist/vue.esm-browser.js';
 
 let myModal = '';
 let delProductModal='';
+const apiUrl= `https://vue3-course-api.hexschool.io/v2`
+const path= 'maciw2'
 
 
 const app = createApp({
     data(){
         return{
-            apiUrl: `https://vue3-course-api.hexschool.io/v2`,
-            path:'maciw2',
+            apiUrl,
+            path,
             products:[], // 資料集
-            isNew: false, //是否新增
+            isNew: false, //是否是新的
             tempProduct:{
                 imagesUrl: [],
             },//暫存區
+            modalDel: null,
+            pages: {}
         };
     },
     methods: {
@@ -27,10 +31,12 @@ const app = createApp({
                     //window.location = 'login.html';
                 })
        },
-       getData(){
-            axios.get(`${this.apiUrl}/api/${this.path}/admin/products`) 
+       getData(page=1){
+            axios.get(`${this.apiUrl}/api/${this.path}/admin/products?page=${page}`) 
                 .then((res)=>{
-                    this.products=res.data.products;
+                    this.products=res.data.products;//有分頁
+                    this.pages = res.data.pagination;
+                    console.log(res)
                 })
                 .catch((err)=>{
                     alert(err.response.data.message);

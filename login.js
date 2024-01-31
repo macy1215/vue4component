@@ -17,7 +17,7 @@ createApp({
       axios.post(`${url}/admin/signin`,this.user)
       .then((res)=>{
         const { token , expired} = res.data //解構 將token 跟時間抓到
-        console.log(token,expired);
+        //console.log(token,expired);
         document.cookie = `hexVueToken=${token}; expires=${expired}`;
         window.location= 'productlist.html'
       })

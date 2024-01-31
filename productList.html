@@ -141,6 +141,26 @@
             </tr>
           </tbody>
         </table>
+
+        <!-- 分頁按鈕 -->
+        <nav aria-label="Page navigation example">
+            <ul class="pagination">
+              <li class="page-item" :class="{disabled:!pages.has_pre}">
+                <a class="page-link" href="#" aria-label="Previous" @click="getData(pages.current_page-1)">
+                  <span aria-hidden="true">&laquo;</span>
+                </a>
+              </li>
+              <li class="page-item" v-for="page in pages.total_pages" :key="page+123" :class="{active:page === pages.current_page}">
+                <a class="page-link" href="#" @click="getData(page)">{{page}}</a>
+             </li>
+              <li class="page-item" :class="{disabled: !pages.has_next}">
+                <a class="page-link" href="#" aria-label="Next" @click="getData(pages.current_page+1)">
+                  <span aria-hidden="true">&raquo;</span>
+                </a>
+              </li>
+            </ul>
+          </nav>
+
       </div>
       <!-- Modal -->
       <div id="productModal" ref="productModal" class="modal fade" tabindex="-1" aria-labelledby="productModalLabel"
@@ -172,7 +192,7 @@
                             <label :for="`imagesUrl${key}`" class="form-label mb-0">圖片網址</label>
                             <input :id='`imagesUrl${item}`' type="text" class="form-control mb-1" v-model="tempProduct.imagesUrl[key]" placeholder="請輸入圖片連結">
                           </div>
-                          <img class="img-fluid" :src="item" :alt="">
+                          <img class="img-fluid" :src="item" alt="">
                         </div>
                         <template v-if="!tempProduct.imagesUrl.length || tempProduct.imagesUrl[tempProduct.imagesUrl.length - 1]" class="my-2">
                           <button class="btn btn-outline-primary btn-sm d-block w-100" @click="tempProduct.imagesUrl.push('')">
