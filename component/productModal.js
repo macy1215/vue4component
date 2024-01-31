@@ -14,7 +14,6 @@
         }
     },
     template:`
-    {{tempProduct}}
     <div id="productModal" ref="productModal" class="modal fade" tabindex="-1" aria-labelledby="productModalLabel"
            aria-hidden="true">
         <div class="modal-dialog modal-xl">

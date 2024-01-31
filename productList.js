@@ -7,6 +7,7 @@ const path= 'maciw2'
 
 import pagination from './component/pagination.js';
 import productModal from './component/productModal.js';
+import delProductModal from './component/delProductModal.js';
 
 const app = createApp({
     data(){
@@ -19,19 +20,23 @@ const app = createApp({
                 imagesUrl: [],
             },//暫存區
             myModal : null, //profuceModal
-            modalDel:null,
+            delProductModal:null,
             pages: {}
         };
     },
     methods: {
+        //先驗證 在取資料
        checkAdmin(){
                 axios.post(`${this.apiUrl}/api/user/check`) 
                 .then((res)=>{
-                    this.getData();
+                    if(res.data.success){
+                        this.getData();
+                    }
                 })
                 .catch((err)=>{
                     alert(err.response.data.message);
-                    //window.location = 'login.html';
+                    window.location = 'login.html';
+                    //回到 登入頁面
                 })
        },
        getData(page=1){
@@ -50,6 +55,7 @@ const app = createApp({
        },
        openModal(isNew, item){
         if(isNew === 'new'){
+            //為了確保是初始狀態 清空
             this.tempProduct={
                 imagesUrl:[],
                 //新增，將所有欄位淨空
@@ -63,8 +69,9 @@ const app = createApp({
             //myModal.show();
             this.$refs.pModal.openModal();
         }else if(isNew === 'delete'){
-            //this.tempProduct={...item};
+            this.tempProduct={...item};
             //delProductModal.show();//跳出警告視窗
+            this.$refs.dModal.openDeletm();
         }
 
         //myModal.show();
@@ -93,12 +100,12 @@ const app = createApp({
          this.tempProduct.imagesUrl=[];
          this.tempProduct.imagesUrl.push('');
        },
-       removeImgurl(){
+       deleteProduct(){
         const url = `${this.apiUrl}/api/${this.path}/admin/product/${this.tempProduct.id}`;
         axios.delete (url,{data:this.tempProduct})
                 .then((res)=>{
                     alert(res.data.message);
-                    delProductModal.hide();
+                    this.$refs.dModal.closeProduct();
                     this.getData();
                 })
                 .catch((err)=>{
@@ -113,14 +120,14 @@ const app = createApp({
         // axios.defaults.headers.common['Authorization'] = token
         const token = document.cookie.replace(/(?:(?:^|.*;\s*)hexVueToken\s*=\s*([^;]*).*$)|^.*$/, '$1');
         axios.defaults.headers.common.Authorization = token;
-    
-        this.checkAdmin();
         
-        this.delProductModal=new bootstrap.Modal(document.querySelector('#delProductModal'));
+        //先 check 再取資料
+        this.checkAdmin();
     },
     components:{
         pagination,
-        productModal
+        productModal,
+        delProductModal
     }
 });
 
