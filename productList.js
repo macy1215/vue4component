@@ -5,6 +5,7 @@ let delProductModal='';
 const apiUrl= `https://vue3-course-api.hexschool.io/v2`
 const path= 'maciw2'
 
+import pagination from './component/pagination.js';
 
 const app = createApp({
     data(){
@@ -112,6 +113,9 @@ const app = createApp({
         this.checkAdmin();
         myModal=new bootstrap.Modal(document.querySelector('#productModal'));
         delProductModal=new bootstrap.Modal(document.querySelector('#delProductModal'));
+    },
+    components:{
+        pagination,
     }
 });
 
