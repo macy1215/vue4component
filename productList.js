@@ -1,11 +1,12 @@
 import { createApp } from 'https://unpkg.com/vue@3/dist/vue.esm-browser.js';
 
-let myModal = '';
-let delProductModal='';
+// let myModal = '';
+// let delProductModal='';
 const apiUrl= `https://vue3-course-api.hexschool.io/v2`
 const path= 'maciw2'
 
 import pagination from './component/pagination.js';
+import productModal from './component/productModal.js';
 
 const app = createApp({
     data(){
@@ -17,7 +18,8 @@ const app = createApp({
             tempProduct:{
                 imagesUrl: [],
             },//暫存區
-            modalDel: null,
+            myModal : null, //profuceModal
+            modalDel:null,
             pages: {}
         };
     },
@@ -53,14 +55,16 @@ const app = createApp({
                 //新增，將所有欄位淨空
             };
             this.isNew=true;
-            myModal.show();
+            this.$refs.pModal.openModal();
+            //myModal.show();
         }else if(isNew === 'edit') {
             this.tempProduct={...item};//將值帶入input
             this.isNew=false;
-            myModal.show();
+            //myModal.show();
+            this.$refs.pModal.openModal();
         }else if(isNew === 'delete'){
             //this.tempProduct={...item};
-            delProductModal.show();//跳出警告視窗
+            //delProductModal.show();//跳出警告視窗
         }
 
         //myModal.show();
@@ -77,7 +81,7 @@ const app = createApp({
             axios[http](url,{data:this.tempProduct})
                 .then((res)=>{
                     alert(res.data.message);
-                    myModal.hide();
+                    this.$refs.pModal.closeModal();
                     this.getData();
                 })
                 .catch((err)=>{
@@ -111,11 +115,12 @@ const app = createApp({
         axios.defaults.headers.common.Authorization = token;
     
         this.checkAdmin();
-        myModal=new bootstrap.Modal(document.querySelector('#productModal'));
-        delProductModal=new bootstrap.Modal(document.querySelector('#delProductModal'));
+        
+        this.delProductModal=new bootstrap.Modal(document.querySelector('#delProductModal'));
     },
     components:{
         pagination,
+        productModal
     }
 });
 
