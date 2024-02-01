@@ -14,7 +14,6 @@ export default{
         }
     },
     template:`
-    {{ tempProduct}}
     <div id="delProductModal" ref="delProductModal" class="modal fade" tabindex="-1"
     aria-labelledby="delProductModalLabel" aria-hidden="true">
  <div class="modal-dialog">
